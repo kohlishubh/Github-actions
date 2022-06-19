@@ -1,20 +1,12 @@
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+name: learn-github-actions
+on: [push]
 jobs:
-  setup:
+  check-bats-version:
     runs-on: ubuntu-latest
     steps:
-      - run: ./setup_server.sh
-  build:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - run: ./build_server.sh
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - run: ./test_server.sh
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - run: npm install -g bats
+      - run: bats -v
